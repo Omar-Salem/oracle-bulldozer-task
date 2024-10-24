@@ -27,6 +27,10 @@ public enum Square {
         return this == PROTECTED_TREE;
     }
 
+    public boolean isCleared() {
+        return this == CLEARED;
+    }
+
     public boolean isTree() {
         return this == TREE;
     }

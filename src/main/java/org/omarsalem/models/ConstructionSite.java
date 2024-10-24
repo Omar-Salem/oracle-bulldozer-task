@@ -1,6 +1,7 @@
 package org.omarsalem.models;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import static org.omarsalem.models.Direction.EAST;
 import static org.omarsalem.models.Square.CLEARED;
@@ -12,10 +13,10 @@ public class ConstructionSite {
     private final Bulldozer bulldozer = new Bulldozer(-1, 0, EAST);
     private final List<Command> commands = new ArrayList<>();
     private int fuelCost = 0;
-    private int penalty = 0;
+    private int damagePenalty = 0;
 
     public ConstructionSite(char[][] map) {
-        if (Arrays.stream(map)
+        if (Stream.of(map)
                 .anyMatch(row -> row.length != map[0].length)) {
             throw new IllegalArgumentException("Site rows length mismatch");
         }
@@ -58,12 +59,12 @@ public class ConstructionSite {
             site[y][x] = CLEARED;
             fuelCost += currentSquare.getFuelCost();
             if (currentSquare.isProtectedTree()) {
-                penalty += 10;
+                damagePenalty += 10;
                 return true;
             }
             final boolean stillPassing = i < steps - 1;
             if (currentSquare.isTree() && stillPassing) {
-                penalty += 2;
+                damagePenalty += 2;
             }
         }
         return false;
@@ -83,5 +84,19 @@ public class ConstructionSite {
 
     public Square[][] getSite() {
         return site.clone();
+    }
+
+    public long getPenalty() {
+        return commands.size() +
+                damagePenalty +
+                fuelCost +
+                getUnclearedSquaresCount();
+    }
+
+    private long getUnclearedSquaresCount() {
+        return Stream.of(site)
+                .flatMap(Stream::of)
+                .filter(square -> !(square.isCleared() || square.isProtectedTree()))
+                .count();
     }
 }

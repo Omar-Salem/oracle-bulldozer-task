@@ -5,7 +5,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -152,6 +151,76 @@ class ConstructionSiteTest {
     }
 
     @Test
+    void penalty_calculation_for_fuel_and_communication() {
+        //Arrange
+        final char[][] map = {
+                {'o', 'c', 'r'},
+                {'c', 'c', 'c'},
+        };
+        final ConstructionSite target = new ConstructionSite(map);
+        final Command command = new PayloadCommand<>(ADVANCE, 1);
+
+        //Act
+        for (int i = 0; i < map[0].length; i++) {
+            target.handleCommand(command);
+        }
+
+        //Assert
+        assertEquals(7, target.getPenalty());
+    }
+
+    @Test
+    void not_stopping_at_a_tree_incurs_penalty() {
+        //Arrange
+        final char[][] map = {
+                {'o', 't', 'r'},
+                {'c', 'c', 'c'},
+        };
+        final ConstructionSite target = new ConstructionSite(map);
+        final Command command = new PayloadCommand<>(ADVANCE, 3);
+
+        //Act
+        target.handleCommand(command);
+
+        //Assert
+        assertEquals(8, target.getPenalty());
+    }
+
+    @Test
+    void not_clearing_all_squares_incurs_penalty() {
+        //Arrange
+        final char[][] map = {
+                {'o', 'o', 'r'},
+                {'o', 'o', 'o'},
+        };
+        final ConstructionSite target = new ConstructionSite(map);
+        final Command command = new PayloadCommand<>(ADVANCE, 3);
+
+        //Act
+        target.handleCommand(command);
+
+        //Assert
+        assertEquals(8, target.getPenalty());
+    }
+
+    @Test
+    void stopping_at_a_tree_is_not_penalized() {
+        //Arrange
+        final char[][] map = {
+                {'o', 'r', 't'},
+                {'c', 'c', 'c'},
+        };
+        final ConstructionSite target = new ConstructionSite(map);
+        final Command command = new PayloadCommand<>(ADVANCE, 3);
+
+        //Act
+        target.handleCommand(command);
+
+        //Assert
+        assertEquals(6, target.getPenalty());
+    }
+
+    @Test
     void bulldozer_clears_squares_it_passes() {
         //Arrange
         final char[][] map = {
@@ -175,23 +244,6 @@ class ConstructionSiteTest {
         assertEquals(expected, actual);
     }
 
-    @ParameterizedTest
-    @MethodSource("providePenaltyCalculationArgs")
-    void penalty_calculation(char c, int expected) {
-        //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[][]{
-                {c},
-                {c}
-        });
-        final Command command = new PayloadCommand<>(ADVANCE, 1);
-
-        //Act
-        target.handleCommand(command);
-
-        //Assert
-        assertEquals(expected, target.getFuelCost());
-    }
-
     public static Stream<Arguments> provideCommandArgs() {
         return Stream.of(
                 Arguments.of(new Command(LEFT), Direction.NORTH, -1, 0),
@@ -201,16 +253,6 @@ class ConstructionSiteTest {
     }
 
     public static Stream<Arguments> provideFuelCalculationArgs() {
-        return Stream.of(
-                Arguments.of('o', 1),
-                Arguments.of('c', 1),
-                Arguments.of('r', 2),
-                Arguments.of('t', 2),
-                Arguments.of('T', 2)
-        );
-    }
-
-    public static Stream<Arguments> providePenaltyCalculationArgs() {
         return Stream.of(
                 Arguments.of('o', 1),
                 Arguments.of('c', 1),
