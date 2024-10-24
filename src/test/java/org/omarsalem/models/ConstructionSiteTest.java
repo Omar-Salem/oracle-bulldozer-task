@@ -68,6 +68,22 @@ class ConstructionSiteTest {
     }
 
     @Test
+    void bulldozer_hitting_a_protected_tree_ends_simulation() {
+        //Arrange
+        final ConstructionSite target = new ConstructionSite(new char[][]{
+                {'T', 'o'},
+                {'o', 'o'}
+        });
+        final Command command = new PayloadCommand<>(ADVANCE, 3);
+
+        //Act
+        boolean simulationEnded = target.handleCommand(command);
+
+        //Assert
+        assertTrue(simulationEnded);
+    }
+
+    @Test
     void quit_command_ends_simulation() {
         //Arrange
         final ConstructionSite target = new ConstructionSite(new char[][]{
