@@ -5,7 +5,7 @@ public enum Square {
     CLEARED(1, 'c'),
     ROCKY(2, 'r'),
     TREE(2, 't'),
-    PROTECTED_TREE(0, 'T');
+    PROTECTED_TREE(2, 'T');
 
     private final int fuelCost;
     private final char symbol;
@@ -19,8 +19,12 @@ public enum Square {
         return fuelCost;
     }
 
-    public boolean endsSimulation() {
+    public boolean isProtectedTree() {
         return this == PROTECTED_TREE;
+    }
+
+    public boolean isTree() {
+        return this == TREE;
     }
 
     public static Square bySymbol(char symbol) {

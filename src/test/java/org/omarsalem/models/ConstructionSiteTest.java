@@ -99,11 +99,38 @@ class ConstructionSiteTest {
         assertFalse(simulationEnded);
     }
 
+    @ParameterizedTest
+    @MethodSource("provideFuelCalculationArgs")
+    void fuel_calculation(char c, int expected) {
+        //Arrange
+        final ConstructionSite target = new ConstructionSite(new char[][]{
+                {c},
+                {c}
+        });
+        final Command command = new PayloadCommand<>(ADVANCE, 1);
+
+        //Act
+        target.handleCommand(command);
+
+        //Assert
+        assertEquals(expected, target.getFuelCost());
+    }
+
     public static Stream<Arguments> provideCommandArgs() {
         return Stream.of(
                 Arguments.of(new Command(LEFT), Direction.NORTH, -1, 0),
                 Arguments.of(new Command(RIGHT), Direction.SOUTH, -1, 0),
                 Arguments.of(new PayloadCommand<>(ADVANCE, 2), Direction.EAST, 1, 0)
+        );
+    }
+
+    public static Stream<Arguments> provideFuelCalculationArgs() {
+        return Stream.of(
+                Arguments.of('o', 1),
+                Arguments.of('c', 1),
+                Arguments.of('r', 2),
+                Arguments.of('t', 2),
+                Arguments.of('T', 2)
         );
     }
 }
