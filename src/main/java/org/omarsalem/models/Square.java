@@ -19,6 +19,10 @@ public enum Square {
         return fuelCost;
     }
 
+    public char getSymbol() {
+        return symbol;
+    }
+
     public boolean isProtectedTree() {
         return this == PROTECTED_TREE;
     }

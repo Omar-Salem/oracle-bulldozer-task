@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
+import java.util.stream.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.omarsalem.models.CommandType.*;
@@ -133,6 +133,30 @@ class ConstructionSiteTest {
 
         //Assert
         assertEquals(8, target.getFuelCost());
+    }
+
+    @Test
+    void bulldozer_clears_squares_it_passes() {
+        //Arrange
+        final char[][] map = {
+                {'o', 'c', 'r', 't', 'T'},
+                {'o', 'c', 'r', 't', 'T'},
+        };
+        final ConstructionSite target = new ConstructionSite(map);
+        final Command command = new PayloadCommand<>(ADVANCE, 1);
+
+        //Act
+        for (int i = 0; i < map[0].length; i++) {
+            target.handleCommand(command);
+        }
+
+        //Assert
+        final List<Character> expected = List.of('c', 'c', 'c', 'c', 'c');
+        final List<Character> actual = Arrays
+                .stream(target.getSite()[0])
+                .map(s -> s.getSymbol())
+                .collect(Collectors.toList());
+        assertEquals(expected, actual);
     }
 
     @ParameterizedTest

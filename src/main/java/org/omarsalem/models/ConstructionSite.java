@@ -55,6 +55,7 @@ public class ConstructionSite {
             final int x = bulldozer.getX();
             final int y = bulldozer.getY();
             final Square currentSquare = site[y][x];
+            site[y][x] = CLEARED;
             fuelCost += currentSquare.getFuelCost();
             if (currentSquare.isProtectedTree()) {
                 penalty += 10;
@@ -64,7 +65,6 @@ public class ConstructionSite {
             if (currentSquare.isTree() && stillPassing) {
                 penalty += 2;
             }
-            site[y][x] = CLEARED;
         }
         return false;
     }
@@ -79,5 +79,9 @@ public class ConstructionSite {
 
     public int getFuelCost() {
         return fuelCost;
+    }
+
+    public Square[][] getSite() {
+        return site.clone();
     }
 }
