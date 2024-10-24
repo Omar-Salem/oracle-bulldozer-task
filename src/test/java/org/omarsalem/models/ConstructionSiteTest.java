@@ -16,10 +16,7 @@ class ConstructionSiteTest {
     @Test
     void operation_adds_to_command_list() {
         //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[][]{
-                {'o'},
-                {'o'}
-        });
+        final ConstructionSite target = new ConstructionSite(new char[1][1]);
         final List<Command> expected = List.of(new Command(LEFT),
                 new Command(RIGHT),
                 new Command(RIGHT),
@@ -37,10 +34,7 @@ class ConstructionSiteTest {
     @MethodSource("provideCommandArgs")
     void command_parsed_and_calls_bulldozer_actions(Command cmd, Direction direction, int x, int y) {
         //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[][]{
-                {'o'},
-                {'o'}
-        });
+        final ConstructionSite target = new ConstructionSite(new char[1][1]);
 
         //Act
         target.handleCommand(cmd);
@@ -49,6 +43,45 @@ class ConstructionSiteTest {
         assertEquals(direction, target.getBulldozer().getDirection());
         assertEquals(x, target.getBulldozer().getX());
         assertEquals(y, target.getBulldozer().getY());
+    }
+
+    @Test
+    void bulldozer_out_of_bounds_ends_simulation() {
+        //Arrange
+        final ConstructionSite target = new ConstructionSite(new char[1][1]);
+        final Command command = new PayloadCommand<>(ADVANCE, 2);
+
+        //Act
+        boolean simulationEnded = target.handleCommand(command);
+
+        //Assert
+        assertTrue(simulationEnded);
+    }
+
+    @Test
+    void quit_command_ends_simulation() {
+        //Arrange
+        final ConstructionSite target = new ConstructionSite(new char[1][1]);
+        final Command command = new Command(QUIT);
+
+        //Act
+        boolean simulationEnded = target.handleCommand(command);
+
+        //Assert
+        assertTrue(simulationEnded);
+    }
+
+    @Test
+    void bulldozer_within_bounds_simulation_keeps_running() {
+        //Arrange
+        final ConstructionSite target = new ConstructionSite(new char[1][1]);
+        final Command command = new PayloadCommand<>(ADVANCE, 1);
+
+        //Act
+        boolean simulationEnded = target.handleCommand(command);
+
+        //Assert
+        assertFalse(simulationEnded);
     }
 
     public static Stream<Arguments> provideCommandArgs() {

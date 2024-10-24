@@ -17,12 +17,18 @@ public class ConstructionSite {
         this.width = map[0].length - 1;
     }
 
-    public void handleCommand(Command command) {
+    public boolean handleCommand(Command command) {
+        boolean simulationEnded = false;
         switch (command.getCommandType()) {
             case ADVANCE:
                 final PayloadCommand<Integer> payloadCommand = (PayloadCommand<Integer>) command;
                 for (int i = 0; i < payloadCommand.getPayload(); i++) {
-                    bulldozer.advance();
+                    if (bulldozer.isOutsideBoundary(length, width)) {
+                        simulationEnded = true;
+                        break;
+                    } else {
+                        bulldozer.advance();
+                    }
                 }
                 break;
             case LEFT:
@@ -32,11 +38,13 @@ public class ConstructionSite {
                 bulldozer.right();
                 break;
             case QUIT:
+                simulationEnded = true;
                 break;
             default:
                 throw new IllegalStateException("Unhandled command type: " + command.getCommandType());
         }
         commands.add(command);
+        return simulationEnded;
     }
 
     public List<Command> getCommands() {

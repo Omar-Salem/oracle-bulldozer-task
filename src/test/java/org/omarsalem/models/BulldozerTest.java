@@ -52,6 +52,19 @@ class BulldozerTest {
         assertPosition(expectedX, expectedY, target);
     }
 
+    @ParameterizedTest
+    @MethodSource("provideBoundaryCheckingArgs")
+    void boundary_checking(int x, int y, Direction direction, boolean isOutOfBounds) {
+        //Arrange
+        final Bulldozer target = new Bulldozer(x, y, direction);
+
+        //Act
+        final boolean actual = target.isOutsideBoundary(5, 7);
+
+        //Assert
+        assertEquals(isOutOfBounds, actual);
+    }
+
     private static void assertPosition(int expectedX, int expectedY, Bulldozer target) {
         assertEquals(expectedX, target.getX());
         assertEquals(expectedY, target.getY());
@@ -82,6 +95,21 @@ class BulldozerTest {
                 Arguments.of(Direction.WEST, -1, 0),
                 Arguments.of(Direction.SOUTH, 0, -1),
                 Arguments.of(Direction.EAST, 1, 0)
+        );
+    }
+
+    public static Stream<Arguments> provideBoundaryCheckingArgs() {
+
+        return Stream.of(
+                Arguments.of(5, 7, Direction.EAST, true),
+                Arguments.of(5, 7, Direction.WEST, false),
+                Arguments.of(5, 7, Direction.NORTH, true),
+                Arguments.of(5, 7, Direction.SOUTH, false),
+                
+                Arguments.of(0, 0, Direction.EAST, false),
+                Arguments.of(0, 0, Direction.WEST, true),
+                Arguments.of(0, 0, Direction.NORTH, false),
+                Arguments.of(0, 0, Direction.SOUTH, true)
         );
     }
 }
