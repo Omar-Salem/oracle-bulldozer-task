@@ -101,7 +101,43 @@ class ConstructionSiteTest {
 
     @ParameterizedTest
     @MethodSource("provideFuelCalculationArgs")
-    void fuel_calculation(char c, int expected) {
+    void fuel_calculation_for_a_single_square(char c, int expected) {
+        //Arrange
+        final ConstructionSite target = new ConstructionSite(new char[][]{
+                {c},
+                {c}
+        });
+        final Command command = new PayloadCommand<>(ADVANCE, 1);
+
+        //Act
+        target.handleCommand(command);
+
+        //Assert
+        assertEquals(expected, target.getFuelCost());
+    }
+
+    @Test
+    void fuel_calculation_for_a_single_row() {
+        //Arrange
+        final char[][] map = {
+                {'o', 'c', 'r', 't', 'T'},
+                {'o', 'c', 'r', 't', 'T'},
+        };
+        final ConstructionSite target = new ConstructionSite(map);
+        final Command command = new PayloadCommand<>(ADVANCE, 1);
+
+        //Act
+        for (int i = 0; i < map[0].length; i++) {
+            target.handleCommand(command);
+        }
+
+        //Assert
+        assertEquals(8, target.getFuelCost());
+    }
+
+    @ParameterizedTest
+    @MethodSource("providePenaltyCalculationArgs")
+    void penalty_calculation(char c, int expected) {
         //Arrange
         final ConstructionSite target = new ConstructionSite(new char[][]{
                 {c},
@@ -125,6 +161,16 @@ class ConstructionSiteTest {
     }
 
     public static Stream<Arguments> provideFuelCalculationArgs() {
+        return Stream.of(
+                Arguments.of('o', 1),
+                Arguments.of('c', 1),
+                Arguments.of('r', 2),
+                Arguments.of('t', 2),
+                Arguments.of('T', 2)
+        );
+    }
+
+    public static Stream<Arguments> providePenaltyCalculationArgs() {
         return Stream.of(
                 Arguments.of('o', 1),
                 Arguments.of('c', 1),

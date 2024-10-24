@@ -19,12 +19,12 @@ public class ConstructionSite {
                 .anyMatch(row -> row.length != map[0].length)) {
             throw new IllegalArgumentException("Site rows length mismatch");
         }
-        this.length = map.length - 1;
-        this.width = map[0].length - 1;
-        this.site = new Square[map.length][map[0].length];
+        this.length = map.length;
+        this.width = map[0].length;
+        this.site = new Square[length][width];
 
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
+        for (int i = 0; i < length; i++) {
+            for (int j = 0; j < width; j++) {
                 site[i][j] = Square.bySymbol(map[i][j]);
             }
         }
@@ -48,13 +48,13 @@ public class ConstructionSite {
 
     private boolean advance(Integer steps) {
         for (int i = 0; i < steps; i++) {
-            if (bulldozer.isOutsideBoundary(length, width)) {
+            if (bulldozer.isOutsideBoundary(length - 1, width - 1)) {
                 return true;
             }
             bulldozer.advance();
             final int x = bulldozer.getX();
             final int y = bulldozer.getY();
-            final Square currentSquare = site[x][y];
+            final Square currentSquare = site[y][x];
             fuelCost += currentSquare.getFuelCost();
             if (currentSquare.isProtectedTree()) {
                 penalty += 10;
@@ -64,7 +64,7 @@ public class ConstructionSite {
             if (currentSquare.isTree() && stillPassing) {
                 penalty += 2;
             }
-            site[x][y] = CLEARED;
+            site[y][x] = CLEARED;
         }
         return false;
     }

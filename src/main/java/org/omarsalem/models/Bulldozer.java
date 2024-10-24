@@ -34,8 +34,8 @@ public class Bulldozer {
     public boolean isOutsideBoundary(int length, int width) {
         final int newX = x + direction.getxTranslate();
         final int newY = y + direction.getyTranslate();
-        return newX > length ||
-                newY > width ||
+        return newX > width ||
+                newY > length ||
                 newX < 0 ||
                 newY < 0;
     }
@@ -56,5 +56,14 @@ public class Bulldozer {
         }
         heading %= FULL_CIRCLE;
         direction = Direction.byHeading(heading);
+    }
+
+    @Override
+    public String toString() {
+        return "Bulldozer{" +
+                "x=" + x +
+                ", y=" + y +
+                ", direction=" + direction +
+                '}';
     }
 }

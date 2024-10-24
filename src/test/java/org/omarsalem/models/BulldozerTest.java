@@ -101,10 +101,10 @@ class BulldozerTest {
     public static Stream<Arguments> provideBoundaryCheckingArgs() {
 
         return Stream.of(
-                Arguments.of(5, 7, Direction.EAST, true),
-                Arguments.of(5, 7, Direction.WEST, false),
-                Arguments.of(5, 7, Direction.NORTH, true),
-                Arguments.of(5, 7, Direction.SOUTH, false),
+                Arguments.of(7, 5, Direction.EAST, true),
+                Arguments.of(7, 5, Direction.WEST, false),
+                Arguments.of(7, 5, Direction.NORTH, true),
+                Arguments.of(7, 5, Direction.SOUTH, false),
 
                 Arguments.of(0, 0, Direction.EAST, false),
                 Arguments.of(0, 0, Direction.WEST, true),
