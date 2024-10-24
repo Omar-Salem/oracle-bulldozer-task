@@ -1,18 +1,20 @@
 package org.omarsalem.models;
 
 public enum Square {
-    PLAIN(1, 'o'),
-    CLEARED(1, 'c'),
-    ROCKY(2, 'r'),
-    TREE(2, 't'),
-    PROTECTED_TREE(2, 'T');
+    PLAIN(1, 'o', 0),
+    CLEARED(1, 'c', 0),
+    ROCKY(2, 'r', 0),
+    TREE(2, 't', 2),
+    PROTECTED_TREE(2, 'T', 10);
 
     private final int fuelCost;
     private final char symbol;
+    private final int penalty;
 
-    Square(int fuelCost, char symbol) {
+    Square(int fuelCost, char symbol, int penalty) {
         this.fuelCost = fuelCost;
         this.symbol = symbol;
+        this.penalty = penalty;
     }
 
     public int getFuelCost() {
@@ -42,5 +44,9 @@ public enum Square {
             }
         }
         throw new IllegalArgumentException("Could not find Square for symbol " + symbol);
+    }
+
+    public int getPenalty(boolean isStillPassing) {
+        return isTree() && isStillPassing ? penalty : 0;
     }
 }

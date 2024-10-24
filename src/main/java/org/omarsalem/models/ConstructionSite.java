@@ -57,14 +57,11 @@ public class ConstructionSite {
             final int y = bulldozer.getY();
             final Square currentSquare = site[y][x];
             site[y][x] = CLEARED;
+            final boolean isStillPassing = i < steps - 1;
             fuelCost += currentSquare.getFuelCost();
+            damagePenalty += currentSquare.getPenalty(isStillPassing);
             if (currentSquare.isProtectedTree()) {
-                damagePenalty += 10;
                 return true;
-            }
-            final boolean stillPassing = i < steps - 1;
-            if (currentSquare.isTree() && stillPassing) {
-                damagePenalty += 2;
             }
         }
         return false;
