@@ -16,7 +16,10 @@ class ConstructionSiteTest {
     @Test
     void operation_adds_to_command_list() {
         //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[1][1]);
+        final ConstructionSite target = new ConstructionSite(new char[][]{
+                {'o', 'o'},
+                {'o', 'o'}
+        });
         final List<Command> expected = List.of(new Command(LEFT),
                 new Command(RIGHT),
                 new Command(RIGHT),
@@ -34,7 +37,10 @@ class ConstructionSiteTest {
     @MethodSource("provideCommandArgs")
     void command_parsed_and_calls_bulldozer_actions(Command cmd, Direction direction, int x, int y) {
         //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[1][1]);
+        final ConstructionSite target = new ConstructionSite(new char[][]{
+                {'o', 'o'},
+                {'o', 'o'}
+        });
 
         //Act
         target.handleCommand(cmd);
@@ -48,8 +54,11 @@ class ConstructionSiteTest {
     @Test
     void bulldozer_out_of_bounds_ends_simulation() {
         //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[1][1]);
-        final Command command = new PayloadCommand<>(ADVANCE, 2);
+        final ConstructionSite target = new ConstructionSite(new char[][]{
+                {'o', 'o'},
+                {'o', 'o'}
+        });
+        final Command command = new PayloadCommand<>(ADVANCE, 3);
 
         //Act
         boolean simulationEnded = target.handleCommand(command);
@@ -61,7 +70,10 @@ class ConstructionSiteTest {
     @Test
     void quit_command_ends_simulation() {
         //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[1][1]);
+        final ConstructionSite target = new ConstructionSite(new char[][]{
+                {'o', 'o'},
+                {'o', 'o'}
+        });
         final Command command = new Command(QUIT);
 
         //Act
@@ -74,7 +86,10 @@ class ConstructionSiteTest {
     @Test
     void bulldozer_within_bounds_simulation_keeps_running() {
         //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[1][1]);
+        final ConstructionSite target = new ConstructionSite(new char[][]{
+                {'o', 'o'},
+                {'o', 'o'}
+        });
         final Command command = new PayloadCommand<>(ADVANCE, 1);
 
         //Act
@@ -88,7 +103,7 @@ class ConstructionSiteTest {
         return Stream.of(
                 Arguments.of(new Command(LEFT), Direction.NORTH, -1, 0),
                 Arguments.of(new Command(RIGHT), Direction.SOUTH, -1, 0),
-                Arguments.of(new PayloadCommand<>(ADVANCE, 5), Direction.EAST, 4, 0)
+                Arguments.of(new PayloadCommand<>(ADVANCE, 2), Direction.EAST, 1, 0)
         );
     }
 }

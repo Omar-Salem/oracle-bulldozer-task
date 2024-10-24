@@ -105,7 +105,7 @@ class BulldozerTest {
                 Arguments.of(5, 7, Direction.WEST, false),
                 Arguments.of(5, 7, Direction.NORTH, true),
                 Arguments.of(5, 7, Direction.SOUTH, false),
-                
+
                 Arguments.of(0, 0, Direction.EAST, false),
                 Arguments.of(0, 0, Direction.WEST, true),
                 Arguments.of(0, 0, Direction.NORTH, false),

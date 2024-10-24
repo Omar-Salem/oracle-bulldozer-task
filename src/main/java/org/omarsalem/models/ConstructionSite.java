@@ -5,16 +5,26 @@ import java.util.*;
 import static org.omarsalem.models.Direction.EAST;
 
 public class ConstructionSite {
-    private final char[][] map;
+    private final Square[][] site;
     private final int length;
     private final int width;
     private final Bulldozer bulldozer = new Bulldozer(-1, 0, EAST);
     private final List<Command> commands = new ArrayList<>();
 
     public ConstructionSite(char[][] map) {
-        this.map = map.clone();
+        if (Arrays.stream(map)
+                .anyMatch(row -> row.length != map.length)) {
+            throw new IllegalArgumentException("Site is not a square");
+        }
         this.length = map.length - 1;
         this.width = map[0].length - 1;
+        this.site = new Square[map.length][map[0].length];
+
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                site[i][j] = Square.bySymbol(map[i][j]);
+            }
+        }
     }
 
     public boolean handleCommand(Command command) {
