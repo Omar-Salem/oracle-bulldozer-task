@@ -1,7 +1,7 @@
 package org.omarsalem.models;
 
 import java.util.*;
-import java.util.stream.Stream;
+import java.util.stream.*;
 
 import static org.omarsalem.models.ClearingOperationType.*;
 import static org.omarsalem.models.CommandType.QUIT;
@@ -118,5 +118,18 @@ public class ConstructionSite {
                 .flatMap(Stream::of)
                 .filter(square -> !(square.isCleared() || square.isProtectedTree()))
                 .count();
+    }
+
+    public String getCommandsAsString() {
+        return getCommands()
+                .stream()
+                .map(c -> {
+                    if (c instanceof PayloadCommand<?>) {
+                        final String payload = ((PayloadCommand<?>) c).getPayload().toString();
+                        return c.getCommandType().getDescription() + " " + payload;
+                    }
+                    return c.getCommandType().getDescription();
+                })
+                .collect(Collectors.joining(", "));
     }
 }
