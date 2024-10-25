@@ -10,6 +10,7 @@ import java.util.stream.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.omarsalem.models.ClearingOperationType.*;
 import static org.omarsalem.models.CommandType.*;
+import static org.omarsalem.models.SimulationResult.*;
 
 class ConstructionSiteTest {
 
@@ -62,10 +63,10 @@ class ConstructionSiteTest {
         final Command command = new PayloadCommand<>(ADVANCE, 3);
 
         //Act
-        boolean simulationEnded = target.handleCommand(command);
+        final SimulationResult simulationResult = target.handleCommand(command);
 
         //Assert
-        assertTrue(simulationEnded);
+        assertEquals(SimulationResult.OUT_OF_BOUNDS, simulationResult);
     }
 
     @Test
@@ -78,10 +79,10 @@ class ConstructionSiteTest {
         final Command command = new PayloadCommand<>(ADVANCE, 3);
 
         //Act
-        boolean simulationEnded = target.handleCommand(command);
+        final SimulationResult simulationResult = target.handleCommand(command);
 
         //Assert
-        assertTrue(simulationEnded);
+        assertEquals(SimulationResult.PROTECTED_TREE_DESTRUCTION, simulationResult);
     }
 
     @Test
@@ -94,10 +95,10 @@ class ConstructionSiteTest {
         final Command command = new Command(QUIT);
 
         //Act
-        boolean simulationEnded = target.handleCommand(command);
+        final SimulationResult simulationResult = target.handleCommand(command);
 
         //Assert
-        assertTrue(simulationEnded);
+        assertEquals(USER_REQUEST, simulationResult);
     }
 
     @Test
@@ -110,10 +111,10 @@ class ConstructionSiteTest {
         final Command command = new PayloadCommand<>(ADVANCE, 1);
 
         //Act
-        boolean simulationEnded = target.handleCommand(command);
+        final SimulationResult simulationResult = target.handleCommand(command);
 
         //Assert
-        assertFalse(simulationEnded);
+        assertEquals(RUNNING, simulationResult);
     }
 
     @ParameterizedTest

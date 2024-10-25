@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import static org.omarsalem.models.ClearingOperationType.*;
 import static org.omarsalem.models.Direction.EAST;
+import static org.omarsalem.models.SimulationResult.*;
 import static org.omarsalem.models.Square.CLEARED;
 
 public class ConstructionSite {
@@ -38,26 +39,26 @@ public class ConstructionSite {
         }
     }
 
-    public boolean handleCommand(Command command) {
-        boolean simulationEnded = false;
+    public SimulationResult handleCommand(Command command) {
+        SimulationResult simulationResult = RUNNING;
         switch (command.getCommandType()) {
             case ADVANCE -> {
                 final PayloadCommand<Integer> payloadCommand = (PayloadCommand<Integer>) command;
-                simulationEnded = advance(payloadCommand.getPayload());
+                simulationResult = advance(payloadCommand.getPayload());
             }
             case LEFT -> heavyMachinery.left();
             case RIGHT -> heavyMachinery.right();
-            case QUIT -> simulationEnded = true;
+            case QUIT -> simulationResult = USER_REQUEST;
             default -> throw new IllegalStateException("Unhandled command type: " + command.getCommandType());
         }
         commands.add(command);
-        return simulationEnded;
+        return simulationResult;
     }
 
-    private boolean advance(Integer steps) {
+    private SimulationResult advance(Integer steps) {
         for (int i = 0; i < steps; i++) {
             if (heavyMachinery.isOutsideBoundary(length - 1, width - 1)) {
-                return true;
+                return OUT_OF_BOUNDS;
             }
             heavyMachinery.advance();
             final int x = heavyMachinery.getPosition().x();
@@ -67,14 +68,14 @@ public class ConstructionSite {
             fuelCost += currentSquare.getFuelCost();
             if (currentSquare.isProtectedTree()) {
                 protectedTreePenalty++;
-                return true;
+                return SimulationResult.PROTECTED_TREE_DESTRUCTION;
             }
             final boolean isStillPassing = i < steps - 1;
             if (currentSquare.isTree() && isStillPassing) {
                 paintDamage++;
             }
         }
-        return false;
+        return RUNNING;
     }
 
     public List<Command> getCommands() {
@@ -84,6 +85,7 @@ public class ConstructionSite {
     public Position getHeavyMachineryPosition() {
         return heavyMachinery.getPosition();
     }
+
     public Direction getHeavyMachineryDirection() {
         return heavyMachinery.getDirection();
     }
@@ -97,7 +99,7 @@ public class ConstructionSite {
                 new ClearingOperation(COMMUNICATION, commands.size()),
                 new ClearingOperation(FUEL, fuelCost),
                 new ClearingOperation(UNCLEARED_SQUARE, getUnclearedSquaresCount()),
-                new ClearingOperation(PROTECTED_TREE_DESTRUCTION, protectedTreePenalty),
+                new ClearingOperation(ClearingOperationType.PROTECTED_TREE_DESTRUCTION, protectedTreePenalty),
                 new ClearingOperation(PAINT_DAMAGE, paintDamage)
         ));
     }

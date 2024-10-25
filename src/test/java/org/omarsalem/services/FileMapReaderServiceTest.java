@@ -18,7 +18,7 @@ class FileMapReaderServiceTest {
         final char[][] map = target.getMap();
 
         //Assert
-        char[][] expected = {
+        final char[][] expected = {
                 {'x', 'y'},
                 {'z', 'w'}
         };
