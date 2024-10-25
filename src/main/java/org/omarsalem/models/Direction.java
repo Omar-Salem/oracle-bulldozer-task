@@ -2,9 +2,9 @@ package org.omarsalem.models;
 
 public enum Direction {
     EAST(0, 1, 0),
-    SOUTH(90, 0, -1),
+    SOUTH(90, 0, 1),
     WEST(180, -1, 0),
-    NORTH(270, 0, 1);
+    NORTH(270, 0, -1);
 
     private final int heading;
     private final int xTranslate;

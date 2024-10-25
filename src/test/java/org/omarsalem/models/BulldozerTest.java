@@ -86,9 +86,9 @@ class BulldozerTest {
     public static Stream<Arguments> provideAdvanceArgs() {
 
         return Stream.of(
-                Arguments.of(Direction.NORTH, 0, 1),
+                Arguments.of(Direction.NORTH, 0, -1),
                 Arguments.of(Direction.WEST, -1, 0),
-                Arguments.of(Direction.SOUTH, 0, -1),
+                Arguments.of(Direction.SOUTH, 0, 1),
                 Arguments.of(Direction.EAST, 1, 0)
         );
     }
@@ -97,14 +97,14 @@ class BulldozerTest {
 
         return Stream.of(
                 Arguments.of(7, 5, Direction.EAST, true),
-                Arguments.of(7, 5, Direction.WEST, false),
-                Arguments.of(7, 5, Direction.NORTH, true),
-                Arguments.of(7, 5, Direction.SOUTH, false),
+                Arguments.of(0, 0, Direction.WEST, true),
+                Arguments.of(0, 0, Direction.NORTH, true),
+                Arguments.of(7, 5, Direction.SOUTH, true),
 
                 Arguments.of(0, 0, Direction.EAST, false),
-                Arguments.of(0, 0, Direction.WEST, true),
-                Arguments.of(0, 0, Direction.NORTH, false),
-                Arguments.of(0, 0, Direction.SOUTH, true)
+                Arguments.of(7, 5, Direction.WEST, false),
+                Arguments.of(7, 5, Direction.NORTH, false),
+                Arguments.of(0, 0, Direction.SOUTH, false)
         );
     }
 }
