@@ -34,6 +34,32 @@ class ConstructionSiteTest {
         assertEquals(expected, target.getCommands());
     }
 
+    @Test
+    void commands_represented_as_comma_separated_string() {
+        //Arrange
+        final ConstructionSite target = new ConstructionSite(new char[][]{
+                {'o', 'o'},
+                {'o', 'o'}
+        });
+        final List<Command> expected = List.of(
+
+                new PayloadCommand<>(ADVANCE, 4),
+                new Command(RIGHT),
+                new PayloadCommand<>(ADVANCE, 4),
+                new Command(LEFT),
+
+                new PayloadCommand<>(ADVANCE, 2),
+                new PayloadCommand<>(ADVANCE, 4),
+                new Command(LEFT),
+                new Command(QUIT));
+
+        //Act
+        expected.forEach(target::handleCommand);
+
+        //Assert
+        assertEquals("advance 4, turn right, advance 4, turn left, advance 2, advance 4, turn left, quit", target.getCommandsAsString());
+    }
+
     @ParameterizedTest
     @MethodSource("provideCommandArgs")
     void command_parsed_and_calls_bulldozer_actions(Command cmd, Direction direction, int x, int y) {
