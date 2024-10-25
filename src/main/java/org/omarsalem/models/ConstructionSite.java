@@ -61,8 +61,9 @@ public class ConstructionSite {
                 return OUT_OF_BOUNDS;
             }
             heavyMachinery.advance();
-            final int x = heavyMachinery.getPosition().x();
-            final int y = heavyMachinery.getPosition().y();
+            final Position position = heavyMachinery.getPosition();
+            final int x = position.x();
+            final int y = position.y();
             final Square currentSquare = site[y][x];
             site[y][x] = CLEARED;
             fuelCost += currentSquare.getFuelCost();
