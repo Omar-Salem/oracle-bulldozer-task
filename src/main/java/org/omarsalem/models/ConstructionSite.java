@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static org.omarsalem.models.ClearingOperationType.*;
+import static org.omarsalem.models.CommandType.QUIT;
 import static org.omarsalem.models.Direction.EAST;
 import static org.omarsalem.models.SimulationResult.*;
 import static org.omarsalem.models.Square.CLEARED;
@@ -97,12 +98,19 @@ public class ConstructionSite {
 
     public SimulationCost getSimulationCost() {
         return new SimulationCost(List.of(
-                new ClearingOperation(COMMUNICATION, commands.size()),
+                new ClearingOperation(COMMUNICATION, getMachineryDrivingCommandsCount()),
                 new ClearingOperation(FUEL, fuelCost),
                 new ClearingOperation(UNCLEARED_SQUARE, getUnclearedSquaresCount()),
                 new ClearingOperation(ClearingOperationType.PROTECTED_TREE_DESTRUCTION, protectedTreePenalty),
                 new ClearingOperation(PAINT_DAMAGE, paintDamage)
         ));
+    }
+
+    private double getMachineryDrivingCommandsCount() {
+        return commands
+                .stream()
+                .filter(c -> !QUIT.equals(c.getCommandType()))
+                .count();
     }
 
     private long getUnclearedSquaresCount() {

@@ -3,10 +3,10 @@ package org.omarsalem.models;
 import java.util.List;
 
 public record SimulationCost(List<ClearingOperation> operations) {
-    double getTotalCost() {
+    public double getTotalCost() {
         return operations
                 .stream()
-                .mapToDouble(o -> o.getTotalCost())
+                .mapToDouble(ClearingOperation::getTotalCost)
                 .sum();
     }
 

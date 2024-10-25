@@ -158,23 +158,39 @@ class ConstructionSiteTest {
     }
 
     @Test
-    void penalty_calculation_for_communication() {
+    void penalty_calculation_for_machinery_drive_communication() {
         //Arrange
         final char[][] map = {
                 {'o', 'c', 'r'},
                 {'c', 'c', 'c'},
         };
         final ConstructionSite target = new ConstructionSite(map);
-        final Command command = new PayloadCommand<>(ADVANCE, 1);
-        final int numberOfCommands = map[0].length;
-
         //Act
-        for (int i = 0; i < numberOfCommands; i++) {
-            target.handleCommand(command);
-        }
+
+        target.handleCommand(new PayloadCommand<>(ADVANCE, 1));
+        target.handleCommand(new Command(LEFT));
+        target.handleCommand(new Command(RIGHT));
 
         //Assert
-        assertEquals(numberOfCommands, target
+        assertEquals(3, target
+                .getSimulationCost()
+                .getCostByOperationType(COMMUNICATION));
+    }
+
+    @Test
+    void quit_command_not_added_in_communication_penalty() {
+        //Arrange
+        final char[][] map = {
+                {'o', 'c', 'r'},
+                {'c', 'c', 'c'},
+        };
+        final ConstructionSite target = new ConstructionSite(map);
+        //Act
+
+        target.handleCommand(new Command(QUIT));
+
+        //Assert
+        assertEquals(0, target
                 .getSimulationCost()
                 .getCostByOperationType(COMMUNICATION));
     }
