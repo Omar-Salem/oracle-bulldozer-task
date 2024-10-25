@@ -13,7 +13,7 @@ class BulldozerTest {
     @MethodSource("provideRightTurnArgs")
     void right_turn_updates_heading(int numberOfTurns, Direction expectedDirection) {
         //Arrange
-        final Bulldozer target = new Bulldozer(0, 0, Direction.EAST);
+        final Bulldozer target = new Bulldozer(new Position( 0, 0), Direction.EAST);
 
         //Act
         for (int i = 0; i < numberOfTurns; i++) {
@@ -28,7 +28,7 @@ class BulldozerTest {
     @MethodSource("provideLeftTurnArgs")
     void left_turn_updates_heading(int numberOfTurns, Direction expectedDirection) {
         //Arrange
-        final Bulldozer target = new Bulldozer(0, 0, Direction.EAST);
+        final Bulldozer target = new Bulldozer(new Position( 0, 0), Direction.EAST);
 
         //Act
         for (int i = 0; i < numberOfTurns; i++) {
@@ -43,31 +43,26 @@ class BulldozerTest {
     @MethodSource("provideAdvanceArgs")
     void advance_updates_position(Direction startingDirection, int expectedX, int expectedY) {
         //Arrange
-        final Bulldozer target = new Bulldozer(0, 0, startingDirection);
+        final Bulldozer target = new Bulldozer(new Position( 0, 0), startingDirection);
 
         //Act
         target.advance();
 
         //Assert
-        assertPosition(expectedX, expectedY, target);
+        assertEquals(new Position(expectedX, expectedY), target.getPosition());
     }
 
     @ParameterizedTest
     @MethodSource("provideBoundaryCheckingArgs")
     void boundary_checking(int x, int y, Direction direction, boolean isOutOfBounds) {
         //Arrange
-        final Bulldozer target = new Bulldozer(x, y, direction);
+        final Bulldozer target = new Bulldozer(new Position( x, y), direction);
 
         //Act
         final boolean actual = target.isOutsideBoundary(5, 7);
 
         //Assert
         assertEquals(isOutOfBounds, actual);
-    }
-
-    private static void assertPosition(int expectedX, int expectedY, Bulldozer target) {
-        assertEquals(expectedX, target.getX());
-        assertEquals(expectedY, target.getY());
     }
 
     private static Stream<Arguments> provideRightTurnArgs() {

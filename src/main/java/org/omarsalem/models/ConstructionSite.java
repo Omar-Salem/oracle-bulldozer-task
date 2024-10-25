@@ -11,7 +11,7 @@ public class ConstructionSite {
     private final Square[][] site;
     private final int length;
     private final int width;
-    private final Bulldozer bulldozer = new Bulldozer(-1, 0, EAST);
+    private final Bulldozer bulldozer = new Bulldozer(new Position(-1, 0), EAST);
     private final List<Command> commands = new ArrayList<>();
     private double fuelCost = 0;
     private double protectedTreePenalty = 0;
@@ -55,8 +55,8 @@ public class ConstructionSite {
                 return true;
             }
             bulldozer.advance();
-            final int x = bulldozer.getX();
-            final int y = bulldozer.getY();
+            final int x = bulldozer.getPosition().x();
+            final int y = bulldozer.getPosition().y();
             final Square currentSquare = site[y][x];
             site[y][x] = CLEARED;
             fuelCost += currentSquare.getFuelCost();

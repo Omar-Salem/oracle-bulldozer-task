@@ -4,22 +4,12 @@ public class Bulldozer {
     private static final int TURN_ANGLE = 90;
     public static final int FULL_CIRCLE = 360;
 
-    private int x;
-    private int y;
+    private Position position;
     private Direction direction;
 
-    public Bulldozer(int x, int y, Direction direction) {
-        this.x = x;
-        this.y = y;
+    public Bulldozer(Position position, Direction direction) {
+        this.position = position;
         this.direction = direction;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 
     public Direction getDirection() {
@@ -27,13 +17,12 @@ public class Bulldozer {
     }
 
     public void advance() {
-        x += direction.getxTranslate();
-        y += direction.getyTranslate();
+        position = position.translate(direction.getxTranslate(), direction.getyTranslate());
     }
 
     public boolean isOutsideBoundary(int length, int width) {
-        final int newX = x + direction.getxTranslate();
-        final int newY = y + direction.getyTranslate();
+        final int newX = position.x() + direction.getxTranslate();
+        final int newY = position.y() + direction.getyTranslate();
         return newX > width ||
                 newY > length ||
                 newX < 0 ||
@@ -58,12 +47,7 @@ public class Bulldozer {
         direction = Direction.byHeading(heading);
     }
 
-    @Override
-    public String toString() {
-        return "Bulldozer{" +
-                "x=" + x +
-                ", y=" + y +
-                ", direction=" + direction +
-                '}';
+    public Position getPosition() {
+        return position;
     }
 }
