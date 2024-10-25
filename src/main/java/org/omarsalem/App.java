@@ -13,6 +13,7 @@ import static org.omarsalem.models.SimulationResult.RUNNING;
 public class App {
     private static MapReaderService fileMapReaderService;
     private static ConstructionSite constructionSite;
+    private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         if (args.length == 0) {
@@ -24,11 +25,31 @@ public class App {
         constructionSite = new ConstructionSite(map);
         System.out.println("Welcome to the Aconex site clearing simulator. This is a map of the site:\n");
         displayMap(map);
+
         System.out.println("The bulldozer is currently located at the Northern edge of the site, immediately to the West of the site, and facing East.\n");
 
-        final Scanner scanner = new Scanner(System.in);
-        SimulationResult simulationResult;
-        while (true) {
+        final SimulationResult simulationResult = runSimulation();
+        System.out.println();
+
+        displaySimulationResult(simulationResult);
+
+        final String commandsAsString = constructionSite.getCommandsAsString();
+        displayCommands(commandsAsString);
+
+        final SimulationCost simulationCost = constructionSite.getSimulationCost();
+        displaySimulationCost(simulationCost);
+
+        System.out.println("Thank you for using the Aconex site clearing simulator.");
+    }
+
+    private static void displayCommands(String commandsAsString) {
+        System.out.println(commandsAsString);
+        System.out.println();
+    }
+
+    private static SimulationResult runSimulation() {
+        SimulationResult simulationResult = RUNNING;
+        while (RUNNING.equals(simulationResult)) {
             System.out.print("(l)eft, (r)ight, (a)dvance <n>, (q)uit:");
             final String[] commandArgs = scanner.nextLine().split(" ");
             if (commandArgs.length == 0) {
@@ -44,18 +65,8 @@ public class App {
                 case LEFT, RIGHT, QUIT -> new Command(commandType);
             };
             simulationResult = constructionSite.handleCommand(command);
-            if (!RUNNING.equals(simulationResult)) {
-                break;
-            }
         }
-        System.out.println();
-        displaySimulationResult(simulationResult);
-        System.out.println(constructionSite.getCommandsAsString());
-        System.out.println();
-        System.out.println("The costs for this land clearing operation were:\n");
-        final SimulationCost simulationCost = constructionSite.getSimulationCost();
-        displaySimulationCost(simulationCost);
-        System.out.println("Thank you for using the Aconex site clearing simulator.");
+        return simulationResult;
     }
 
     private static void displaySimulationResult(SimulationResult simulationResult) {
@@ -72,6 +83,7 @@ public class App {
     }
 
     private static void displaySimulationCost(SimulationCost simulationCost) {
+        System.out.println("The costs for this land clearing operation were:\n");
         final String headerFormat = "%-40s %15s %10s %n";
         final String rowsFormat = "%-40s %15.0f %10.0f %n";
         final String totalFormat = "%-40s %15.0f %n";
