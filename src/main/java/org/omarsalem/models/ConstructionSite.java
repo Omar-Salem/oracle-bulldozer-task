@@ -3,6 +3,7 @@ package org.omarsalem.models;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static org.omarsalem.models.ClearingOperationType.*;
 import static org.omarsalem.models.Direction.EAST;
 import static org.omarsalem.models.Square.CLEARED;
 
@@ -12,8 +13,9 @@ public class ConstructionSite {
     private final int width;
     private final Bulldozer bulldozer = new Bulldozer(-1, 0, EAST);
     private final List<Command> commands = new ArrayList<>();
-    private int fuelCost = 0;
-    private int damagePenalty = 0;
+    private double fuelCost = 0;
+    private double protectedTreePenalty = 0;
+    private double paintDamage = 0;
 
     public ConstructionSite(char[][] map) {
         if (Stream.of(map)
@@ -57,11 +59,14 @@ public class ConstructionSite {
             final int y = bulldozer.getY();
             final Square currentSquare = site[y][x];
             site[y][x] = CLEARED;
-            final boolean isStillPassing = i < steps - 1;
             fuelCost += currentSquare.getFuelCost();
-            damagePenalty += currentSquare.getPenalty(isStillPassing);
             if (currentSquare.isProtectedTree()) {
+                protectedTreePenalty++;
                 return true;
+            }
+            final boolean isStillPassing = i < steps - 1;
+            if (currentSquare.isTree() && isStillPassing) {
+                paintDamage++;
             }
         }
         return false;
@@ -75,19 +80,18 @@ public class ConstructionSite {
         return bulldozer;
     }
 
-    public int getFuelCost() {
-        return fuelCost;
-    }
-
     public Square[][] getSite() {
         return site.clone();
     }
 
-    public long getPenalty() {
-        return commands.size() +
-                damagePenalty +
-                fuelCost +
-                getUnclearedSquaresCount();
+    public SimulationCost getSimulationCost() {
+        return new SimulationCost(List.of(
+                new ClearingOperation(COMMUNICATION, commands.size()),
+                new ClearingOperation(FUEL, fuelCost),
+                new ClearingOperation(UNCLEARED_SQUARE, getUnclearedSquaresCount()),
+                new ClearingOperation(PROTECTED_TREE_DESTRUCTION, protectedTreePenalty),
+                new ClearingOperation(PAINT_DAMAGE, paintDamage)
+        ));
     }
 
     private long getUnclearedSquaresCount() {

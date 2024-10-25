@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.omarsalem.models.ClearingOperationType.*;
 import static org.omarsalem.models.CommandType.*;
 
 class ConstructionSiteTest {
@@ -128,7 +129,9 @@ class ConstructionSiteTest {
         target.handleCommand(command);
 
         //Assert
-        assertEquals(expected, target.getFuelCost());
+        assertEquals(expected, target
+                .getSimulationCost()
+                .getCostByOperationType(FUEL));
     }
 
     @Test
@@ -147,11 +150,13 @@ class ConstructionSiteTest {
         }
 
         //Assert
-        assertEquals(8, target.getFuelCost());
+        assertEquals(8, target
+                .getSimulationCost()
+                .getCostByOperationType(FUEL));
     }
 
     @Test
-    void penalty_calculation_for_fuel_and_communication() {
+    void penalty_calculation_for_communication() {
         //Arrange
         final char[][] map = {
                 {'o', 'c', 'r'},
@@ -159,31 +164,17 @@ class ConstructionSiteTest {
         };
         final ConstructionSite target = new ConstructionSite(map);
         final Command command = new PayloadCommand<>(ADVANCE, 1);
+        final int numberOfCommands = map[0].length;
 
         //Act
-        for (int i = 0; i < map[0].length; i++) {
+        for (int i = 0; i < numberOfCommands; i++) {
             target.handleCommand(command);
         }
 
         //Assert
-        assertEquals(7, target.getPenalty());
-    }
-
-    @Test
-    void not_stopping_at_a_tree_incurs_penalty() {
-        //Arrange
-        final char[][] map = {
-                {'o', 't', 'r'},
-                {'c', 'c', 'c'},
-        };
-        final ConstructionSite target = new ConstructionSite(map);
-        final Command command = new PayloadCommand<>(ADVANCE, 3);
-
-        //Act
-        target.handleCommand(command);
-
-        //Assert
-        assertEquals(8, target.getPenalty());
+        assertEquals(numberOfCommands, target
+                .getSimulationCost()
+                .getCostByOperationType(COMMUNICATION));
     }
 
     @Test
@@ -200,7 +191,28 @@ class ConstructionSiteTest {
         target.handleCommand(command);
 
         //Assert
-        assertEquals(8, target.getPenalty());
+        assertEquals(9, target
+                .getSimulationCost()
+                .getCostByOperationType(UNCLEARED_SQUARE));
+    }
+
+    @Test
+    void not_stopping_at_a_tree_incurs_paint_damage_penalty() {
+        //Arrange
+        final char[][] map = {
+                {'o', 't', 'r'},
+                {'c', 'c', 'c'},
+        };
+        final ConstructionSite target = new ConstructionSite(map);
+        final Command command = new PayloadCommand<>(ADVANCE, 3);
+
+        //Act
+        target.handleCommand(command);
+
+        //Assert
+        assertEquals(2, target
+                .getSimulationCost()
+                .getCostByOperationType(PAINT_DAMAGE));
     }
 
     @Test
@@ -217,7 +229,9 @@ class ConstructionSiteTest {
         target.handleCommand(command);
 
         //Assert
-        assertEquals(6, target.getPenalty());
+        assertEquals(0, target
+                .getSimulationCost()
+                .getCostByOperationType(PAINT_DAMAGE));
     }
 
     @Test
