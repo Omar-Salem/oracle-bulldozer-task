@@ -11,7 +11,7 @@ public class ConstructionSite {
     private final Square[][] site;
     private final int length;
     private final int width;
-    private final Bulldozer bulldozer;
+    private final HeavyMachinery heavyMachinery;
     private final List<Command> commands = new ArrayList<>();
     private double fuelCost = 0;
     private double protectedTreePenalty = 0;
@@ -21,8 +21,8 @@ public class ConstructionSite {
         this(map, new Bulldozer(new Position(-1, 0), EAST));
     }
 
-    public ConstructionSite(char[][] map, Bulldozer bulldozer) {
-        this.bulldozer = bulldozer;
+    public ConstructionSite(char[][] map, HeavyMachinery heavyMachinery) {
+        this.heavyMachinery = heavyMachinery;
         if (Stream.of(map)
                 .anyMatch(row -> row.length != map[0].length)) {
             throw new IllegalArgumentException("Site rows length mismatch");
@@ -45,8 +45,8 @@ public class ConstructionSite {
                 final PayloadCommand<Integer> payloadCommand = (PayloadCommand<Integer>) command;
                 simulationEnded = advance(payloadCommand.getPayload());
             }
-            case LEFT -> bulldozer.left();
-            case RIGHT -> bulldozer.right();
+            case LEFT -> heavyMachinery.left();
+            case RIGHT -> heavyMachinery.right();
             case QUIT -> simulationEnded = true;
             default -> throw new IllegalStateException("Unhandled command type: " + command.getCommandType());
         }
@@ -56,12 +56,12 @@ public class ConstructionSite {
 
     private boolean advance(Integer steps) {
         for (int i = 0; i < steps; i++) {
-            if (bulldozer.isOutsideBoundary(length - 1, width - 1)) {
+            if (heavyMachinery.isOutsideBoundary(length - 1, width - 1)) {
                 return true;
             }
-            bulldozer.advance();
-            final int x = bulldozer.getPosition().x();
-            final int y = bulldozer.getPosition().y();
+            heavyMachinery.advance();
+            final int x = heavyMachinery.getPosition().x();
+            final int y = heavyMachinery.getPosition().y();
             final Square currentSquare = site[y][x];
             site[y][x] = CLEARED;
             fuelCost += currentSquare.getFuelCost();
@@ -81,8 +81,11 @@ public class ConstructionSite {
         return Collections.unmodifiableList(commands);
     }
 
-    public Bulldozer getBulldozer() {
-        return bulldozer;
+    public Position getHeavyMachineryPosition() {
+        return heavyMachinery.getPosition();
+    }
+    public Direction getHeavyMachineryDirection() {
+        return heavyMachinery.getDirection();
     }
 
     public Square[][] getSite() {

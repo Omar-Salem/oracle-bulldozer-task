@@ -13,7 +13,7 @@ class BulldozerTest {
     @MethodSource("provideRightTurnArgs")
     void right_turn_updates_heading(int numberOfTurns, Direction expectedDirection) {
         //Arrange
-        final Bulldozer target = new Bulldozer(new Position( 0, 0), Direction.EAST);
+        final HeavyMachinery target = new Bulldozer(new Position( 0, 0), Direction.EAST);
 
         //Act
         for (int i = 0; i < numberOfTurns; i++) {
@@ -28,7 +28,7 @@ class BulldozerTest {
     @MethodSource("provideLeftTurnArgs")
     void left_turn_updates_heading(int numberOfTurns, Direction expectedDirection) {
         //Arrange
-        final Bulldozer target = new Bulldozer(new Position( 0, 0), Direction.EAST);
+        final HeavyMachinery target = new Bulldozer(new Position( 0, 0), Direction.EAST);
 
         //Act
         for (int i = 0; i < numberOfTurns; i++) {
@@ -43,7 +43,7 @@ class BulldozerTest {
     @MethodSource("provideAdvanceArgs")
     void advance_updates_position(Direction startingDirection, int expectedX, int expectedY) {
         //Arrange
-        final Bulldozer target = new Bulldozer(new Position( 0, 0), startingDirection);
+        final HeavyMachinery target = new Bulldozer(new Position( 0, 0), startingDirection);
 
         //Act
         target.advance();
@@ -56,7 +56,7 @@ class BulldozerTest {
     @MethodSource("provideBoundaryCheckingArgs")
     void boundary_checking(int x, int y, Direction direction, boolean isOutOfBounds) {
         //Arrange
-        final Bulldozer target = new Bulldozer(new Position( x, y), direction);
+        final HeavyMachinery target = new Bulldozer(new Position( x, y), direction);
 
         //Act
         final boolean actual = target.isOutsideBoundary(5, 7);

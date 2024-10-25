@@ -46,8 +46,8 @@ class ConstructionSiteTest {
         target.handleCommand(cmd);
 
         //Assert
-        assertEquals(direction, target.getBulldozer().getDirection());
-        final Position position = target.getBulldozer().getPosition();
+        assertEquals(direction, target.getHeavyMachineryDirection());
+        final Position position = target.getHeavyMachineryPosition();
         assertEquals(x, position.x());
         assertEquals(y, position.y());
     }
