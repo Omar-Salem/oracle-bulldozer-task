@@ -11,13 +11,18 @@ public class ConstructionSite {
     private final Square[][] site;
     private final int length;
     private final int width;
-    private final Bulldozer bulldozer = new Bulldozer(new Position(-1, 0), EAST);
+    private final Bulldozer bulldozer;
     private final List<Command> commands = new ArrayList<>();
     private double fuelCost = 0;
     private double protectedTreePenalty = 0;
     private double paintDamage = 0;
 
     public ConstructionSite(char[][] map) {
+        this(map, new Bulldozer(new Position(-1, 0), EAST));
+    }
+
+    public ConstructionSite(char[][] map, Bulldozer bulldozer) {
+        this.bulldozer = bulldozer;
         if (Stream.of(map)
                 .anyMatch(row -> row.length != map[0].length)) {
             throw new IllegalArgumentException("Site rows length mismatch");
