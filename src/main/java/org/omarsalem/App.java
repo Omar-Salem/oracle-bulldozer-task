@@ -71,15 +71,13 @@ public class App {
 
     private static void displaySimulationResult(SimulationResult simulationResult) {
         switch (simulationResult) {
-            case OUT_OF_BOUNDS ->
-                    System.out.println("The simulation has ended because machinery drove out of bounds. These are the commands you issued:");
+            case OUT_OF_BOUNDS -> System.out.print("The simulation has ended because machinery drove out of bounds.");
             case PROTECTED_TREE_DESTRUCTION ->
-                    System.out.println("The simulation has ended because a protected tree was destroyed. These are the commands you issued:");
-            case USER_REQUEST ->
-                    System.out.println("The simulation has ended at your request. These are the commands you issued:");
-            default -> System.out.println("The simulation has ended. These are the commands you issued:");
+                    System.out.print("The simulation has ended because a protected tree was destroyed.");
+            case USER_REQUEST -> System.out.print("The simulation has ended at your request.");
+            case RUNNING -> System.out.print("The simulation is still running.");
         }
-        System.out.println();
+        System.out.println(" These are the commands you issued:");
     }
 
     private static void displaySimulationCost(SimulationCost simulationCost) {
