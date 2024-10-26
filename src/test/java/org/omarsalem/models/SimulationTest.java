@@ -55,7 +55,7 @@ class SimulationTest {
     }
 
     @Test
-    void not_stopping_at_a_tree_incurs_paint_damage_penalty() {
+    void passing_a_tree_incurs_paint_damage_penalty() {
         //Arrange
         final char[][] map = {
                 {'o', 't', 'r'},
@@ -145,7 +145,7 @@ class SimulationTest {
     }
 
     @Test
-    void quit_command_does_not_add_to_communication_penalty() {
+    void quit_command_not_included_in_communication_penalty() {
         //Arrange
         final char[][] map = {
                 {'o', 'c', 'r'},
