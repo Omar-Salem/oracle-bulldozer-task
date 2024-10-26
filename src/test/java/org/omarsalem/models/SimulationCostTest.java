@@ -32,7 +32,7 @@ class SimulationCostTest {
                 new ClearingOperation(ClearingOperationType.FUEL, 19),
                 new ClearingOperation(ClearingOperationType.UNCLEARED_SQUARE, 34),
                 new ClearingOperation(ClearingOperationType.PROTECTED_TREE_DESTRUCTION, 0),
-                new ClearingOperation(ClearingOperationType.PAINT_DAMAGE, 2)
+                new ClearingOperation(ClearingOperationType.PAINT_DAMAGE, 1)
         ));
 
         //Act
@@ -45,9 +45,9 @@ class SimulationCostTest {
                 fuel usage                                            19         19\s
                 uncleared squares                                     34        102\s
                 destruction of protected tree                          0          0\s
-                paint damage to bulldozer                              2          4\s
+                paint damage to bulldozer                              1          2\s
                 ---
-                Total                                                132\s
+                Total                                                130\s
                 """, actual);
     }
 }

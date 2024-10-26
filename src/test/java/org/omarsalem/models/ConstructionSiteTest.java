@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.*;
 import java.util.*;
 import java.util.stream.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.omarsalem.models.ClearingOperationType.*;
 import static org.omarsalem.models.CommandType.*;
 import static org.omarsalem.models.SimulationResult.*;
@@ -300,6 +300,42 @@ class ConstructionSiteTest {
                 .map(s -> s.getSymbol())
                 .collect(Collectors.toList());
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void sample_scenario() {
+        //Arrange
+        final char[][] map = {
+                {'o', 'o', 't', 'o', 'o', 'o', 'o', 'o', 'o', 'o'},
+                {'o', 'o', 'o', 'o', 'o', 'o', 'o', 'T', 'o', 'o'},
+                {'r', 'r', 'r', 'o', 'o', 'o', 'o', 'T', 'o', 'o'},
+                {'r', 'r', 'r', 'r', 'o', 'o', 'o', 'o', 'o', 'o'},
+                {'r', 'r', 'r', 'r', 'r', 't', 'o', 'o', 'o', 'o'},
+        };
+        final ConstructionSite target = new ConstructionSite(map);
+        final List<Command> commands = List.of(
+                new PayloadCommand<>(ADVANCE, 4),
+                new Command(RIGHT),
+                new PayloadCommand<>(ADVANCE, 4),
+                new Command(LEFT),
+                new PayloadCommand<>(ADVANCE, 2),
+                new PayloadCommand<>(ADVANCE, 4),
+                new Command(LEFT),
+                new Command(QUIT)
+        );
+
+        //Act
+        commands.forEach(target::handleCommand);
+
+        //Assert
+        final SimulationCost expectedCost = new SimulationCost(List.of(
+                new ClearingOperation(COMMUNICATION, 7),
+                new ClearingOperation(FUEL, 19),
+                new ClearingOperation(UNCLEARED_SQUARE, 34),
+                new ClearingOperation(ClearingOperationType.PROTECTED_TREE_DESTRUCTION, 0),
+                new ClearingOperation(PAINT_DAMAGE, 1)));
+        assertEquals(expectedCost, target.getSimulationCost());
+        assertEquals(commands, target.getCommands());
     }
 
     public static Stream<Arguments> provideCommandArgs() {
