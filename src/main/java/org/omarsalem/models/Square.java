@@ -1,46 +1,38 @@
 package org.omarsalem.models;
 
-public enum Square {
-    PLAIN(1, 'o'),
-    CLEARED(1, 'c'),
-    ROCKY(2, 'r'),
-    TREE(2, 't'),
-    PROTECTED_TREE(2, 'T');
+import static org.omarsalem.models.SquareType.*;
 
-    private final int fuelCost;
-    private final char symbol;
+public final class Square {
+    private SquareType squareType;
 
-    Square(int fuelCost, char symbol) {
-        this.fuelCost = fuelCost;
-        this.symbol = symbol;
+    public Square(SquareType squareType) {
+        this.squareType = squareType;
     }
 
-    public int getFuelCost() {
-        return fuelCost;
-    }
-
-    public char getSymbol() {
-        return symbol;
+    public VisitResult visit(boolean isStillPassing) {
+        final VisitResult visitResult = new VisitResult(squareType.getFuelCost(),
+                PROTECTED_TREE.equals(squareType) ? 1 : 0,
+                TREE.equals(squareType) && isStillPassing ? 1 : 0);
+        this.squareType = SquareType.CLEARED;
+        return visitResult;
     }
 
     public boolean isProtectedTree() {
-        return this == PROTECTED_TREE;
+        return squareType == PROTECTED_TREE;
     }
 
     public boolean isCleared() {
-        return this == CLEARED;
+        return squareType == CLEARED;
     }
 
-    public boolean isTree() {
-        return this == TREE;
+    public char getSymbol() {
+        return squareType.getSymbol();
     }
 
-    public static Square bySymbol(char symbol) {
-        for (Square e : values()) {
-            if (e.symbol == symbol) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException("Could not find Square for symbol " + symbol);
+
+    public record VisitResult(int fuelCost,
+                              double protectedTreePenalty,
+                              double paintDamage) {
+
     }
 }

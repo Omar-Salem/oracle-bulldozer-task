@@ -7,7 +7,6 @@ import static org.omarsalem.models.ClearingOperationType.*;
 import static org.omarsalem.models.CommandType.QUIT;
 import static org.omarsalem.models.Direction.EAST;
 import static org.omarsalem.models.SimulationResult.*;
-import static org.omarsalem.models.Square.CLEARED;
 
 public class ConstructionSite {
     private final Square[][] site;
@@ -35,7 +34,7 @@ public class ConstructionSite {
 
         for (int i = 0; i < length; i++) {
             for (int j = 0; j < width; j++) {
-                site[i][j] = Square.bySymbol(map[i][j]);
+                site[i][j] = new Square(SquareType.bySymbol(map[i][j]));
             }
         }
     }
@@ -63,18 +62,13 @@ public class ConstructionSite {
             }
             heavyMachinery.advance();
             final Position position = heavyMachinery.getPosition();
-            final int x = position.x();
-            final int y = position.y();
-            final Square currentSquare = site[y][x];
-            site[y][x] = CLEARED;
-            fuelCost += currentSquare.getFuelCost();
-            if (currentSquare.isProtectedTree()) {
-                protectedTreePenalty++;
-                return SimulationResult.PROTECTED_TREE_DESTRUCTION;
-            }
             final boolean isStillPassing = i < steps - 1;
-            if (currentSquare.isTree() && isStillPassing) {
-                paintDamage++;
+            final Square.VisitResult visitResult = site[position.y()][position.x()].visit(isStillPassing);
+            fuelCost += visitResult.fuelCost();
+            paintDamage += visitResult.paintDamage();
+            protectedTreePenalty = visitResult.protectedTreePenalty();
+            if (protectedTreePenalty != 0) {
+                return SimulationResult.PROTECTED_TREE_DESTRUCTION;
             }
         }
         return RUNNING;
