@@ -12,12 +12,12 @@ import static org.omarsalem.models.ClearingOperationType.*;
 import static org.omarsalem.models.CommandType.*;
 import static org.omarsalem.models.SimulationResult.*;
 
-class ConstructionSiteTest {
+class SimulationTest {
 
     @Test
     void operation_adds_to_command_list() {
         //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[][]{
+        final Simulation target = new Simulation(new char[][]{
                 {'o', 'o'},
                 {'o', 'o'}
         });
@@ -37,7 +37,7 @@ class ConstructionSiteTest {
     @Test
     void commands_represented_as_comma_separated_string() {
         //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[][]{
+        final Simulation target = new Simulation(new char[][]{
                 {'o', 'o'},
                 {'o', 'o'}
         });
@@ -64,7 +64,7 @@ class ConstructionSiteTest {
     @MethodSource("provideCommandArgs")
     void command_parsed_and_calls_bulldozer_actions(Command cmd, Direction direction, int x, int y) {
         //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[][]{
+        final Simulation target = new Simulation(new char[][]{
                 {'o', 'o'},
                 {'o', 'o'}
         });
@@ -82,7 +82,7 @@ class ConstructionSiteTest {
     @Test
     void bulldozer_out_of_bounds_ends_simulation() {
         //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[][]{
+        final Simulation target = new Simulation(new char[][]{
                 {'o', 'o'},
                 {'o', 'o'}
         });
@@ -98,7 +98,7 @@ class ConstructionSiteTest {
     @Test
     void bulldozer_hitting_a_protected_tree_ends_simulation() {
         //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[][]{
+        final Simulation target = new Simulation(new char[][]{
                 {'T', 'o'},
                 {'o', 'o'}
         });
@@ -114,7 +114,7 @@ class ConstructionSiteTest {
     @Test
     void quit_command_ends_simulation() {
         //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[][]{
+        final Simulation target = new Simulation(new char[][]{
                 {'o', 'o'},
                 {'o', 'o'}
         });
@@ -130,7 +130,7 @@ class ConstructionSiteTest {
     @Test
     void bulldozer_within_bounds_simulation_keeps_running() {
         //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[][]{
+        final Simulation target = new Simulation(new char[][]{
                 {'o', 'o'},
                 {'o', 'o'}
         });
@@ -147,7 +147,7 @@ class ConstructionSiteTest {
     @MethodSource("provideFuelCalculationArgs")
     void fuel_calculation_for_a_single_square(char c, int expected) {
         //Arrange
-        final ConstructionSite target = new ConstructionSite(new char[][]{
+        final Simulation target = new Simulation(new char[][]{
                 {c},
                 {c}
         });
@@ -169,7 +169,7 @@ class ConstructionSiteTest {
                 {'o', 'c', 'r', 't', 'T'},
                 {'o', 'c', 'r', 't', 'T'},
         };
-        final ConstructionSite target = new ConstructionSite(map);
+        final Simulation target = new Simulation(map);
         final Command command = new PayloadCommand<>(ADVANCE, 1);
 
         //Act
@@ -190,7 +190,7 @@ class ConstructionSiteTest {
                 {'o', 'c', 'r'},
                 {'c', 'c', 'c'},
         };
-        final ConstructionSite target = new ConstructionSite(map);
+        final Simulation target = new Simulation(map);
         //Act
 
         target.handleCommand(new PayloadCommand<>(ADVANCE, 1));
@@ -210,7 +210,7 @@ class ConstructionSiteTest {
                 {'o', 'c', 'r'},
                 {'c', 'c', 'c'},
         };
-        final ConstructionSite target = new ConstructionSite(map);
+        final Simulation target = new Simulation(map);
         //Act
 
         target.handleCommand(new Command(QUIT));
@@ -228,7 +228,7 @@ class ConstructionSiteTest {
                 {'o', 'o', 'r'},
                 {'o', 'o', 'o'},
         };
-        final ConstructionSite target = new ConstructionSite(map);
+        final Simulation target = new Simulation(map);
         final Command command = new PayloadCommand<>(ADVANCE, 3);
 
         //Act
@@ -247,7 +247,7 @@ class ConstructionSiteTest {
                 {'o', 't', 'r'},
                 {'c', 'c', 'c'},
         };
-        final ConstructionSite target = new ConstructionSite(map);
+        final Simulation target = new Simulation(map);
         final Command command = new PayloadCommand<>(ADVANCE, 3);
 
         //Act
@@ -266,7 +266,7 @@ class ConstructionSiteTest {
                 {'o', 'r', 't'},
                 {'c', 'c', 'c'},
         };
-        final ConstructionSite target = new ConstructionSite(map);
+        final Simulation target = new Simulation(map);
         final Command command = new PayloadCommand<>(ADVANCE, 3);
 
         //Act
@@ -285,7 +285,7 @@ class ConstructionSiteTest {
                 {'o', 'c', 'r', 't', 'T'},
                 {'o', 'c', 'r', 't', 'T'},
         };
-        final ConstructionSite target = new ConstructionSite(map);
+        final Simulation target = new Simulation(map);
         final Command command = new PayloadCommand<>(ADVANCE, 1);
 
         //Act
@@ -296,7 +296,7 @@ class ConstructionSiteTest {
         //Assert
         final List<Character> expected = List.of('c', 'c', 'c', 'c', 'c');
         final List<Character> actual = Arrays
-                .stream(target.getSite()[0])
+                .stream(target.getSite().getSquares()[0])
                 .map(s -> s.getSymbol())
                 .collect(Collectors.toList());
         assertEquals(expected, actual);
@@ -312,7 +312,7 @@ class ConstructionSiteTest {
                 {'r', 'r', 'r', 'r', 'o', 'o', 'o', 'o', 'o', 'o'},
                 {'r', 'r', 'r', 'r', 'r', 't', 'o', 'o', 'o', 'o'},
         };
-        final ConstructionSite target = new ConstructionSite(map);
+        final Simulation target = new Simulation(map);
         final List<Command> commands = List.of(
                 new PayloadCommand<>(ADVANCE, 4),
                 new Command(RIGHT),

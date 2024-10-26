@@ -12,7 +12,7 @@ import static org.omarsalem.models.SimulationResult.RUNNING;
  */
 public class App {
     private static MapReaderService fileMapReaderService;
-    private static ConstructionSite constructionSite;
+    private static Simulation simulation;
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -22,7 +22,7 @@ public class App {
         final String mapPathArg = args[0];
         fileMapReaderService = new FileMapReaderService(mapPathArg);
         final char[][] map = fileMapReaderService.getMap();
-        constructionSite = new ConstructionSite(map);
+        simulation = new Simulation(map);
         System.out.println("Welcome to the Aconex site clearing simulator. This is a map of the site:\n");
         displayMap(map);
 
@@ -33,10 +33,10 @@ public class App {
 
         displaySimulationResult(simulationResult);
 
-        final String commandsAsString = constructionSite.getCommandsAsString();
+        final String commandsAsString = simulation.getCommandsAsString();
         displayCommands(commandsAsString);
 
-        final SimulationCost simulationCost = constructionSite.getSimulationCost();
+        final SimulationCost simulationCost = simulation.getSimulationCost();
         displaySimulationCost(simulationCost);
 
         System.out.println("Thank you for using the Aconex site clearing simulator.");
@@ -64,7 +64,7 @@ public class App {
                 }
                 case LEFT, RIGHT, QUIT -> new Command(commandType);
             };
-            simulationResult = constructionSite.handleCommand(command);
+            simulationResult = simulation.handleCommand(command);
         }
         return simulationResult;
     }
