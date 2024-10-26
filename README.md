@@ -11,7 +11,7 @@ General approach was "_How do I split this into models? how would they interact 
 - Deciding where should penalty calculation live.
 - Creating `Simulation` and how it interacts with `ConstructionSite` and `Bulldozer`.
 - Updated `Square` to handle penalty logic and updating status when visited, idea was separating concern between how a map gets updated and how penalty is computed.
-- Test harness every step as I go.
+- Test and verification with every step.
 
 ## Run
 ```bash
