@@ -282,8 +282,8 @@ class SimulationTest {
     void bulldozer_clears_squares_it_passes() {
         //Arrange
         final char[][] map = {
-                {'o', 'c', 'r', 't', 'T'},
-                {'o', 'c', 'r', 't', 'T'},
+                {'o', 'o', 'r', 't', 'T'},
+                {'c', 'c', 'c', 'c', 'c'},
         };
         final Simulation target = new Simulation(map);
         final Command command = new PayloadCommand<>(ADVANCE, 1);
@@ -294,12 +294,7 @@ class SimulationTest {
         }
 
         //Assert
-        final List<Character> expected = List.of('c', 'c', 'c', 'c', 'c');
-        final List<Character> actual = Arrays
-                .stream(target.getSite().getSquares()[0])
-                .map(s -> s.getSymbol())
-                .collect(Collectors.toList());
-        assertEquals(expected, actual);
+        assertEquals(0, target.getSite().getUnclearedSquaresCount());
     }
 
     @Test

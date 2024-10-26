@@ -21,4 +21,6 @@ java -jar target/oracle-bulldozer-task-1.0.0.jar <map path>
 
 
 ## Assumptions
-Map file exists, is not malformed, no illegal characters
+- Map file exists, is not malformed, no illegal characters
+- Map fits in memory
+- Number of operations fits in memory

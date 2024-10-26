@@ -23,10 +23,6 @@ public class ConstructionSite {
         }
     }
 
-    public Square[][] getSquares() {
-        return squares.clone();
-    }
-
     public long getUnclearedSquaresCount() {
         return Stream.of(squares)
                 .flatMap(Stream::of)
