@@ -13,9 +13,15 @@ General approach was "_How do I split this into models? how would they interact 
 - Updated `Square` to handle penalty logic and updating status when visited, idea was separating concern between how a map gets updated and how penalty is computed.
 - Test and verification with every step.
 
-## Run
+## Run Tests
 ```bash
-mvn clean package
+mvn site
+```
+report will be available at `target/site/surefire.html`
+
+## Run App
+```bash
+mvn clean package -DskipTests
 java -jar target/oracle-bulldozer-task-1.0.0.jar <map path>
 ```
 
