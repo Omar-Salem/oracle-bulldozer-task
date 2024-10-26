@@ -84,18 +84,7 @@ public class App {
 
     private static void displaySimulationCost(SimulationCost simulationCost) {
         System.out.println("The costs for this land clearing operation were:\n");
-        final String headerFormat = "%-40s %15s %10s %n";
-        final String rowsFormat = "%-40s %15.0f %10.0f %n";
-        final String totalFormat = "%-40s %15.0f %n";
-        System.out.printf(headerFormat, "Item", "Quantity", "Cost");
-        simulationCost
-                .operations()
-                .forEach(c -> {
-                    final ClearingOperationType operationType = c.clearingOperationType();
-                    System.out.printf(rowsFormat, operationType.getDescription(), c.quantity(), c.getTotalCost());
-                });
-        System.out.println("---");
-        System.out.printf(totalFormat, "Total", simulationCost.getTotalCost());
+        System.out.println(simulationCost);
         System.out.println();
     }
 
