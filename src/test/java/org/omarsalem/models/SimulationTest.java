@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.*;
 import java.util.*;
 import java.util.stream.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.omarsalem.models.ClearingOperationType.*;
 import static org.omarsalem.models.CommandType.*;
 import static org.omarsalem.models.SimulationResult.*;
@@ -176,6 +176,28 @@ class SimulationTest {
 
         //Assert
         assertEquals(USER_REQUEST, simulationResult);
+    }
+
+    @Test
+    void commands_no_longer_accepted_after_simulation_ends() {
+        //Arrange
+        final Simulation target = new Simulation(new char[][]{
+                {'o', 'o'},
+                {'o', 'o'}
+        });
+
+        //Act
+        target.handleCommand(new Command(QUIT));
+
+        //Assert
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
+            target.handleCommand(new Command(RIGHT));
+        });
+
+        final String expectedMessage = "Simulation ended";
+        final String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test

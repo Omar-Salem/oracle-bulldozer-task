@@ -16,6 +16,7 @@ public class Simulation {
     private double fuelCost = 0;
     private double protectedTreePenalty = 0;
     private double paintDamage = 0;
+    private SimulationResult simulationResult = RUNNING;
 
     public Simulation(char[][] map) {
         this(map, new Bulldozer(new Position(-1, 0), EAST));
@@ -27,7 +28,9 @@ public class Simulation {
     }
 
     public SimulationResult handleCommand(Command command) {
-        SimulationResult simulationResult = RUNNING;
+        if (!RUNNING.equals(simulationResult)) {
+            throw new IllegalStateException("Simulation ended");
+        }
         switch (command.getCommandType()) {
             case ADVANCE -> {
                 final PayloadCommand<Integer> payloadCommand = (PayloadCommand<Integer>) command;
