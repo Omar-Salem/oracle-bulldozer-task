@@ -34,7 +34,7 @@ public class Simulation {
         switch (command.getCommandType()) {
             case ADVANCE -> {
                 if (!(command instanceof AdvanceCommand advanceCommand)) {
-                    throw new IllegalArgumentException("Invalid advance command payload");
+                    throw new IllegalArgumentException("Invalid advance command");
                 }
                 simulationStatus = advance(advanceCommand.getSteps());
             }
