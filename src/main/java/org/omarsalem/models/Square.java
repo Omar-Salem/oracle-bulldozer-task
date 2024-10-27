@@ -1,8 +1,11 @@
 package org.omarsalem.models;
 
+import java.util.*;
+
 import static org.omarsalem.models.SquareType.*;
 
 public final class Square {
+    private static final Set<SquareType> CLEARED_TYPES = Collections.unmodifiableSet(EnumSet.of(CLEARED, PROTECTED_TREE));
     private SquareType squareType;
 
     public Square(SquareType squareType) {
@@ -17,16 +20,8 @@ public final class Square {
         return visitResult;
     }
 
-    public boolean isProtectedTree() {
-        return squareType == PROTECTED_TREE;
-    }
-
     public boolean isCleared() {
-        return squareType == CLEARED;
-    }
-
-    public char getSymbol() {
-        return squareType.getSymbol();
+        return CLEARED_TYPES.contains(squareType);
     }
 
 

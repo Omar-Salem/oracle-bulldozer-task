@@ -18,7 +18,9 @@ public class ConstructionSite {
 
         for (int i = 0; i < length; i++) {
             for (int j = 0; j < width; j++) {
-                squares[i][j] = new Square(SquareType.bySymbol(map[i][j]));
+                final char symbol = map[i][j];
+                final SquareType squareType = SquareType.bySymbol(symbol);
+                squares[i][j] = new Square(squareType);
             }
         }
     }
@@ -26,7 +28,7 @@ public class ConstructionSite {
     public long getUnclearedSquaresCount() {
         return Stream.of(squares)
                 .flatMap(Stream::of)
-                .filter(square -> !(square.isCleared() || square.isProtectedTree()))
+                .filter(square -> !square.isCleared())
                 .count();
     }
 
@@ -39,6 +41,7 @@ public class ConstructionSite {
     }
 
     public Square.VisitResult visit(Position position, boolean isStillPassing) {
-        return squares[position.y()][position.x()].visit(isStillPassing);
+        final Square square = squares[position.y()][position.x()];
+        return square.visit(isStillPassing);
     }
 }

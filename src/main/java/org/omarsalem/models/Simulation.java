@@ -71,7 +71,7 @@ public class Simulation {
     }
 
     public String getCommandsAsString() {
-        return getCommands()
+        return commands
                 .stream()
                 .map(Command::toString)
                 .collect(Collectors.joining(", "));
