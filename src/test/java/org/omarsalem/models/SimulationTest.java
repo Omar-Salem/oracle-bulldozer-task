@@ -258,10 +258,11 @@ class SimulationTest {
                 {'o', 'o'},
                 {'o', 'o'}
         });
-        final List<Command> expected = List.of(new Command(LEFT),
+        final List<Command> expected = List.of(
+                new PayloadCommand<>(ADVANCE, 2),
+                new Command(LEFT),
                 new Command(RIGHT),
                 new Command(RIGHT),
-                new PayloadCommand<>(ADVANCE, 5),
                 new Command(QUIT));
 
         //Act
@@ -279,14 +280,8 @@ class SimulationTest {
                 {'o', 'o'}
         });
         final List<Command> expected = List.of(
-
-                new PayloadCommand<>(ADVANCE, 4),
+                new PayloadCommand<>(ADVANCE, 1),
                 new Command(RIGHT),
-                new PayloadCommand<>(ADVANCE, 4),
-                new Command(LEFT),
-
-                new PayloadCommand<>(ADVANCE, 2),
-                new PayloadCommand<>(ADVANCE, 4),
                 new Command(LEFT),
                 new Command(QUIT));
 
@@ -294,7 +289,7 @@ class SimulationTest {
         expected.forEach(target::handleCommand);
 
         //Assert
-        assertEquals("advance 4, turn right, advance 4, turn left, advance 2, advance 4, turn left, quit", target.getCommandsAsString());
+        assertEquals("advance 1, turn right, turn left, quit", target.getCommandsAsString());
     }
 
     @Test

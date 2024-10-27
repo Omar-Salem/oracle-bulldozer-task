@@ -71,13 +71,7 @@ public class Simulation {
     public String getCommandsAsString() {
         return getCommands()
                 .stream()
-                .map(c -> {
-                    if (c instanceof PayloadCommand<?>) {
-                        final String payload = ((PayloadCommand<?>) c).getPayload().toString();
-                        return c.getCommandType().getDescription() + " " + payload;
-                    }
-                    return c.getCommandType().getDescription();
-                })
+                .map(Command::toString)
                 .collect(Collectors.joining(", "));
     }
 

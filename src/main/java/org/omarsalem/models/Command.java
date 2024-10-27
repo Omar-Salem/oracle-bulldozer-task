@@ -10,4 +10,9 @@ public class Command {
     public CommandType getCommandType() {
         return commandType;
     }
+
+    @Override
+    public String toString() {
+        return getCommandType().getDescription();
+    }
 }

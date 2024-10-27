@@ -11,4 +11,9 @@ public class PayloadCommand<T> extends Command {
     public T getPayload() {
         return payload;
     }
+
+    @Override
+    public String toString() {
+        return "%s %s".formatted(super.toString(), payload);
+    }
 }
