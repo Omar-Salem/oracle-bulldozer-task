@@ -93,7 +93,7 @@ class SimulationTest {
     }
 
     @Test
-    void bulldozer_hitting_a_protected_tree_ends_simulation() {
+    void hitting_a_protected_tree_ends_simulation() {
         //Arrange
         final Simulation target = new Simulation(new char[][]{
                 {'T', 'o'},
@@ -109,7 +109,7 @@ class SimulationTest {
     }
 
     @Test
-    void bulldozer_hitting_a_protected_tree_incurs_penalty() {
+    void hitting_a_protected_tree_incurs_penalty() {
         //Arrange
         final Simulation target = new Simulation(new char[][]{
                 {'T', 'o'},
@@ -125,7 +125,7 @@ class SimulationTest {
     }
 
     @Test
-    void bulldozer_drive_commands_adds_to_communication_penalty() {
+    void drive_commands_adds_to_communication_penalty() {
         //Arrange
         final char[][] map = {
                 {'o', 'c', 'r'},
