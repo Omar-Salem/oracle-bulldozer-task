@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import static org.omarsalem.models.ClearingOperationType.*;
 import static org.omarsalem.models.CommandType.QUIT;
 import static org.omarsalem.models.Direction.EAST;
-import static org.omarsalem.models.SimulationResult.*;
+import static org.omarsalem.models.SimulationStatus.*;
 
 public class Simulation {
     private final ConstructionSite site;
@@ -16,7 +16,7 @@ public class Simulation {
     private double fuelCost = 0;
     private double protectedTreePenalty = 0;
     private double paintDamage = 0;
-    private SimulationResult simulationResult = RUNNING;
+    private SimulationStatus simulationStatus = RUNNING;
 
     public Simulation(char[][] map) {
         this(map, new Bulldozer(new Position(-1, 0), EAST));
@@ -27,25 +27,25 @@ public class Simulation {
         this.heavyMachinery = heavyMachinery;
     }
 
-    public SimulationResult handleCommand(Command command) {
-        if (!RUNNING.equals(simulationResult)) {
+    public SimulationStatus handleCommand(Command command) {
+        if (!RUNNING.equals(simulationStatus)) {
             throw new IllegalStateException("Simulation ended");
         }
         switch (command.getCommandType()) {
             case ADVANCE -> {
                 final PayloadCommand<Integer> payloadCommand = (PayloadCommand<Integer>) command;
-                simulationResult = advance(payloadCommand.getPayload());
+                simulationStatus = advance(payloadCommand.getPayload());
             }
             case LEFT -> heavyMachinery.left();
             case RIGHT -> heavyMachinery.right();
-            case QUIT -> simulationResult = USER_REQUEST;
+            case QUIT -> simulationStatus = USER_REQUEST;
             default -> throw new IllegalStateException("Unhandled command type: " + command.getCommandType());
         }
         commands.add(command);
-        return simulationResult;
+        return simulationStatus;
     }
 
-    private SimulationResult advance(Integer steps) {
+    private SimulationStatus advance(Integer steps) {
         for (int i = 0; i < steps; i++) {
             if (heavyMachinery.isOutsideBoundary(site.getLength() - 1, site.getWidth() - 1)) {
                 return OUT_OF_BOUNDS;
@@ -58,7 +58,7 @@ public class Simulation {
             paintDamage += visitResult.paintDamage();
             protectedTreePenalty = visitResult.protectedTreePenalty();
             if (protectedTreePenalty != 0) {
-                return SimulationResult.PROTECTED_TREE_DESTRUCTION;
+                return SimulationStatus.PROTECTED_TREE_DESTRUCTION;
             }
         }
         return RUNNING;

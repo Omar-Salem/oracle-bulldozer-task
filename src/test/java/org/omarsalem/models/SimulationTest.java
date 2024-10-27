@@ -10,7 +10,7 @@ import java.util.stream.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.omarsalem.models.ClearingOperationType.*;
 import static org.omarsalem.models.CommandType.*;
-import static org.omarsalem.models.SimulationResult.*;
+import static org.omarsalem.models.SimulationStatus.*;
 
 class SimulationTest {
 
@@ -102,10 +102,10 @@ class SimulationTest {
         final Command command = new PayloadCommand<>(ADVANCE, 3);
 
         //Act
-        final SimulationResult simulationResult = target.handleCommand(command);
+        final SimulationStatus simulationStatus = target.handleCommand(command);
 
         //Assert
-        assertEquals(SimulationResult.PROTECTED_TREE_DESTRUCTION, simulationResult);
+        assertEquals(SimulationStatus.PROTECTED_TREE_DESTRUCTION, simulationStatus);
     }
 
     @Test
@@ -172,10 +172,10 @@ class SimulationTest {
         final Command command = new Command(QUIT);
 
         //Act
-        final SimulationResult simulationResult = target.handleCommand(command);
+        final SimulationStatus simulationStatus = target.handleCommand(command);
 
         //Assert
-        assertEquals(USER_REQUEST, simulationResult);
+        assertEquals(USER_REQUEST, simulationStatus);
     }
 
     @Test
@@ -210,10 +210,10 @@ class SimulationTest {
         final Command command = new PayloadCommand<>(ADVANCE, 3);
 
         //Act
-        final SimulationResult simulationResult = target.handleCommand(command);
+        final SimulationStatus simulationStatus = target.handleCommand(command);
 
         //Assert
-        assertEquals(SimulationResult.OUT_OF_BOUNDS, simulationResult);
+        assertEquals(SimulationStatus.OUT_OF_BOUNDS, simulationStatus);
     }
 
     @Test
@@ -226,10 +226,10 @@ class SimulationTest {
         final Command command = new PayloadCommand<>(ADVANCE, 1);
 
         //Act
-        final SimulationResult simulationResult = target.handleCommand(command);
+        final SimulationStatus simulationStatus = target.handleCommand(command);
 
         //Assert
-        assertEquals(RUNNING, simulationResult);
+        assertEquals(RUNNING, simulationStatus);
     }
 
     @ParameterizedTest

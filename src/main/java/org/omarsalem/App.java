@@ -5,7 +5,7 @@ import org.omarsalem.services.*;
 
 import java.util.Scanner;
 
-import static org.omarsalem.models.SimulationResult.RUNNING;
+import static org.omarsalem.models.SimulationStatus.RUNNING;
 
 /**
  * Hello world!
@@ -28,10 +28,10 @@ public class App {
 
         System.out.println("The bulldozer is currently located at the Northern edge of the site, immediately to the West of the site, and facing East.\n");
 
-        final SimulationResult simulationResult = runSimulation();
+        final SimulationStatus simulationStatus = runSimulation();
         System.out.println();
 
-        displaySimulationResult(simulationResult);
+        displaySimulationStatus(simulationStatus);
 
         final String commandsAsString = simulation.getCommandsAsString();
         displayCommands(commandsAsString);
@@ -47,9 +47,9 @@ public class App {
         System.out.println();
     }
 
-    private static SimulationResult runSimulation() {
-        SimulationResult simulationResult = RUNNING;
-        while (RUNNING.equals(simulationResult)) {
+    private static SimulationStatus runSimulation() {
+        SimulationStatus simulationStatus = RUNNING;
+        while (RUNNING.equals(simulationStatus)) {
             System.out.print("(l)eft, (r)ight, (a)dvance <n>, (q)uit:");
             final String[] commandArgs = scanner.nextLine().split(" ");
             if (commandArgs.length == 0) {
@@ -64,13 +64,13 @@ public class App {
                 }
                 case LEFT, RIGHT, QUIT -> new Command(commandType);
             };
-            simulationResult = simulation.handleCommand(command);
+            simulationStatus = simulation.handleCommand(command);
         }
-        return simulationResult;
+        return simulationStatus;
     }
 
-    private static void displaySimulationResult(SimulationResult simulationResult) {
-        switch (simulationResult) {
+    private static void displaySimulationStatus(SimulationStatus simulationStatus) {
+        switch (simulationStatus) {
             case OUT_OF_BOUNDS -> System.out.print("The simulation has ended because machinery drove out of bounds.");
             case PROTECTED_TREE_DESTRUCTION ->
                     System.out.print("The simulation has ended because a protected tree was destroyed.");
