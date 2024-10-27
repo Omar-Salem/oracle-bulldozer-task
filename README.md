@@ -30,3 +30,4 @@ java -jar target/oracle-bulldozer-task-1.0.0.jar <map path>
 - Map file exists, is not malformed, no illegal characters
 - Map fits in memory
 - Number of operations fits in memory
+- Operations' arguments are legal (*supplied and of correct type*)
