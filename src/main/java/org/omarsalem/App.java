@@ -60,7 +60,7 @@ public class App {
             final Command command = switch (commandType) {
                 case ADVANCE -> {
                     final int steps = Integer.parseInt(commandArgs[1]);
-                    yield new PayloadCommand<>(commandType, steps);
+                    yield new AdvanceCommand(commandType, steps);
                 }
                 case LEFT, RIGHT, QUIT -> new Command(commandType);
             };

@@ -22,7 +22,7 @@ class SimulationTest {
                 {squareType},
                 {squareType}
         });
-        final Command command = new PayloadCommand<>(ADVANCE, 1);
+        final Command command = new AdvanceCommand(ADVANCE, 1);
 
         //Act
         target.handleCommand(command);
@@ -41,7 +41,7 @@ class SimulationTest {
                 {'o', 'c', 'r', 't', 'T'},
         };
         final Simulation target = new Simulation(map);
-        final Command command = new PayloadCommand<>(ADVANCE, 1);
+        final Command command = new AdvanceCommand(ADVANCE, 1);
 
         //Act
         for (int i = 0; i < map[0].length; i++) {
@@ -62,7 +62,7 @@ class SimulationTest {
                 {'c', 'c', 'c'},
         };
         final Simulation target = new Simulation(map);
-        final Command command = new PayloadCommand<>(ADVANCE, 3);
+        final Command command = new AdvanceCommand(ADVANCE, 3);
 
         //Act
         target.handleCommand(command);
@@ -81,7 +81,7 @@ class SimulationTest {
                 {'c', 'c', 'c'},
         };
         final Simulation target = new Simulation(map);
-        final Command command = new PayloadCommand<>(ADVANCE, 3);
+        final Command command = new AdvanceCommand(ADVANCE, 3);
 
         //Act
         target.handleCommand(command);
@@ -99,7 +99,7 @@ class SimulationTest {
                 {'T', 'o'},
                 {'o', 'o'}
         });
-        final Command command = new PayloadCommand<>(ADVANCE, 3);
+        final Command command = new AdvanceCommand(ADVANCE, 3);
 
         //Act
         final SimulationStatus simulationStatus = target.handleCommand(command);
@@ -115,7 +115,7 @@ class SimulationTest {
                 {'T', 'o'},
                 {'o', 'o'}
         });
-        final Command command = new PayloadCommand<>(ADVANCE, 3);
+        final Command command = new AdvanceCommand(ADVANCE, 3);
 
         //Act
         target.handleCommand(command);
@@ -134,7 +134,7 @@ class SimulationTest {
         final Simulation target = new Simulation(map);
         //Act
 
-        target.handleCommand(new PayloadCommand<>(ADVANCE, 1));
+        target.handleCommand(new AdvanceCommand(ADVANCE, 1));
         target.handleCommand(new Command(LEFT));
         target.handleCommand(new Command(RIGHT));
 
@@ -207,7 +207,7 @@ class SimulationTest {
                 {'o', 'o'},
                 {'o', 'o'}
         });
-        final Command command = new PayloadCommand<>(ADVANCE, 3);
+        final Command command = new AdvanceCommand(ADVANCE, 3);
 
         //Act
         final SimulationStatus simulationStatus = target.handleCommand(command);
@@ -223,7 +223,7 @@ class SimulationTest {
                 {'o', 'o'},
                 {'o', 'o'}
         });
-        final Command command = new PayloadCommand<>(ADVANCE, 1);
+        final Command command = new AdvanceCommand(ADVANCE, 1);
 
         //Act
         final SimulationStatus simulationStatus = target.handleCommand(command);
@@ -259,7 +259,7 @@ class SimulationTest {
                 {'o', 'o'}
         });
         final List<Command> expected = List.of(
-                new PayloadCommand<>(ADVANCE, 2),
+                new AdvanceCommand(ADVANCE, 2),
                 new Command(LEFT),
                 new Command(RIGHT),
                 new Command(RIGHT),
@@ -280,7 +280,7 @@ class SimulationTest {
                 {'o', 'o'}
         });
         final List<Command> expected = List.of(
-                new PayloadCommand<>(ADVANCE, 1),
+                new AdvanceCommand(ADVANCE, 1),
                 new Command(RIGHT),
                 new Command(LEFT),
                 new Command(QUIT));
@@ -300,7 +300,7 @@ class SimulationTest {
                 {'o', 'o', 'o'},
         };
         final Simulation target = new Simulation(map);
-        final Command command = new PayloadCommand<>(ADVANCE, 3);
+        final Command command = new AdvanceCommand(ADVANCE, 3);
 
         //Act
         target.handleCommand(command);
@@ -319,7 +319,7 @@ class SimulationTest {
                 {'c', 'c', 'c', 'c', 'c'},
         };
         final Simulation target = new Simulation(map);
-        final Command command = new PayloadCommand<>(ADVANCE, 1);
+        final Command command = new AdvanceCommand(ADVANCE, 1);
 
         //Act
         for (int i = 0; i < map[0].length; i++) {
@@ -342,12 +342,12 @@ class SimulationTest {
         };
         final Simulation target = new Simulation(map);
         final List<Command> commands = List.of(
-                new PayloadCommand<>(ADVANCE, 4),
+                new AdvanceCommand(ADVANCE, 4),
                 new Command(RIGHT),
-                new PayloadCommand<>(ADVANCE, 4),
+                new AdvanceCommand(ADVANCE, 4),
                 new Command(LEFT),
-                new PayloadCommand<>(ADVANCE, 2),
-                new PayloadCommand<>(ADVANCE, 4),
+                new AdvanceCommand(ADVANCE, 2),
+                new AdvanceCommand(ADVANCE, 4),
                 new Command(LEFT),
                 new Command(QUIT)
         );
@@ -370,7 +370,7 @@ class SimulationTest {
         return Stream.of(
                 Arguments.of(new Command(LEFT), Direction.NORTH, -1, 0),
                 Arguments.of(new Command(RIGHT), Direction.SOUTH, -1, 0),
-                Arguments.of(new PayloadCommand<>(ADVANCE, 2), Direction.EAST, 1, 0)
+                Arguments.of(new AdvanceCommand(ADVANCE, 2), Direction.EAST, 1, 0)
         );
     }
 

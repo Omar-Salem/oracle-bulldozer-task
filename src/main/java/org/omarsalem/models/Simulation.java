@@ -33,8 +33,10 @@ public class Simulation {
         }
         switch (command.getCommandType()) {
             case ADVANCE -> {
-                final PayloadCommand<Integer> payloadCommand = (PayloadCommand<Integer>) command;
-                simulationStatus = advance(payloadCommand.getPayload());
+                if (!(command instanceof AdvanceCommand advanceCommand)) {
+                    throw new IllegalArgumentException("Invalid advance command payload");
+                }
+                simulationStatus = advance(advanceCommand.getSteps());
             }
             case LEFT -> heavyMachinery.left();
             case RIGHT -> heavyMachinery.right();
